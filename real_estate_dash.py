@@ -36,10 +36,12 @@ df['ZipAvg'] = temp
 # Prepare data for training a model
 a = df.drop(columns=['Price', 'ZipCode', 'LotSize'])
 X = a
+a_mean = a.mean()
+X = X / a_mean
 y = df['Price']
 
 # Train a linear regression model (this model has a 80% accuracy)
-model = KNeighborsRegressor(n_neighbors=5).fit(X, y)
+model = KNeighborsRegressor(n_neighbors=10).fit(X, y)
 print(model.score(X, y))
 present_zips = list(df['ZipCode'].unique())
 
@@ -232,8 +234,9 @@ def fun_callback(n_clicks, size, beds, baths, zip):
     if n_clicks > 0:
         if size != None and beds != None and baths != None and zip != None:
         
-            sample = np.array([float(size), float(beds), float(baths), float(zip_to_avg[str(zip)])])
-            sample = np.reshape(sample, newshape=(1, -1))
+            sample = np.array([float(beds), float(baths), float(size), float(zip_to_avg[str(zip)])])
+            sample /= a_mean
+            sample = np.reshape(np.array(sample), newshape=(1, -1))
             predicted = str(model.predict(sample)[0])
             print(predicted)
             predicted_price = dcc.Textarea(value=predicted, style={'width':'560px', 'height':'100px', 'margin':'5px 20px 10px 20px', 'font-size':'xxx-large', 'textAlign':'center'})
