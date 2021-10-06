@@ -217,8 +217,6 @@ app.layout = html.Div(children=[
                             ])
 
 # Callback function definition
-# TASK4: Add 5 ouput components
-# Enter your code below. Make sure you have correct formatting.
 @app.callback( [Output(component_id='predicted_price', component_property='children')],
                [Input(component_id='submit_button', component_property='n_clicks')],
                [State(component_id='my_size', component_property='value'),
